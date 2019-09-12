@@ -4,16 +4,40 @@
 	<title>The Whiteboard Mobile</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style>
-		img {
-
+		body {
+			margin: 0px;
+			font-family: sans-serif;
+		}
+		nav {
+			width: calc(100% - 20px);
+		    position: fixed;
+		    bottom: 0px;
+		    padding: 20px 10px;
+		    display: flex;
+		    text-align: center;
+    		background-color: #eee;
+		}
+		nav a {
+			flex: auto;
+			text-decoration: none;
+		}
+		#comic {
+			width: calc(100% - 16px);
+    		overflow-x: scroll;
+    		margin: 8px;
+    		max-height: calc(100vh - 16px - 58.5px);
+    		text-align: center;
 		}
 	</style>
 </head>
 <body>
-	<a href="?page=autowb001.html">First</a> | 
-	<a href="#" id="prev">Previous</a> | 
-	<a href="#" id="next">Next</a> | 
-	<a href="">Todays</a>
+	<div id="comic"></div>
+	<nav>
+		<a href="?page=autowb001.html">First</a>
+		<a href="#" id="prev">Previous</a>
+		<a href="#" id="next">Next</a>
+		<a href="index.html">Todays</a>
+	</nav>
 	<script type="text/javascript">
 		getUrlVars = () => {
 		    const vars = {};
@@ -52,7 +76,7 @@
 				prevBtn = prevBtn.substring(9, prevBtn.length - 30);
 				document.getElementById('prev').setAttribute('href', '?page=' + prevBtn);
 			}
-			console.log(rawResponse.match(regex4));
+
 			let nextBtn = rawResponse.match(regex4)[0];
 			if (nextBtn) {
 				nextBtn = nextBtn.substring(9, nextBtn.length - 26);
@@ -78,7 +102,7 @@
 		const handleSuccess = resolvedValue => {
 			const comic = new Image();
 			comic.src = resolvedValue;
-			document.body.appendChild(comic);
+			document.getElementById('comic').appendChild(comic);
 		}
 		const handleFailure = rejectionReason => {
 			console.log(rejectionReason);
