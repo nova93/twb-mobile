@@ -10,10 +10,10 @@
 	</style>
 </head>
 <body>
-	<a href="/?page=autowb001.html">First</a> | 
+	<a href="?page=autowb001.html">First</a> | 
 	<a href="#" id="prev">Previous</a> | 
 	<a href="#" id="next">Next</a> | 
-	<a href="/">Todays</a>
+	<a href="">Todays</a>
 	<script type="text/javascript">
 		getUrlVars = () => {
 		    const vars = {};
@@ -50,13 +50,13 @@
 			let prevBtn = rawResponse.match(regex3)[0];
 			if (prevBtn) {
 				prevBtn = prevBtn.substring(9, prevBtn.length - 30);
-				document.getElementById('prev').setAttribute('href', '/?page=' + prevBtn);
+				document.getElementById('prev').setAttribute('href', '?page=' + prevBtn);
 			}
-
+			console.log(rawResponse.match(regex4));
 			let nextBtn = rawResponse.match(regex4)[0];
 			if (nextBtn) {
 				nextBtn = nextBtn.substring(9, nextBtn.length - 26);
-				document.getElementById('next').setAttribute('href', '/?page=' + nextBtn);
+				document.getElementById('next').setAttribute('href', '?page=' + nextBtn);
 			}
 
 		}).catch( error => {
