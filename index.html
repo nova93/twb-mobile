@@ -32,12 +32,7 @@
 </head>
 <body>
 	<div id="comic"></div>
-	<nav>
-		<a href="?page=autowb001.html">First</a>
-		<a href="#" id="prev">Previous</a>
-		<a href="#" id="next">Next</a>
-		<a href="index.html">Todays</a>
-	</nav>
+	
 	<script type="text/javascript">
 		getUrlVars = () => {
 		    const vars = {};
@@ -112,5 +107,11 @@
 			loadImage(path).then(handleSuccess, handleFailure);
 		}
 	</script>
+	<nav>
+		<a href="?page=autowb001.html">First</a>
+		<a href="#" id="prev">Previous</a>
+		<a href="#" id="next">Next</a>
+		<a href="index.html">Todays</a>
+	</nav>
 </body>
 </html>
