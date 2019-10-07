@@ -12,7 +12,7 @@
 			width: calc(100% - 20px);
 		    position: fixed;
 		    bottom: 0px;
-		    padding: 20px 10px;
+		    padding: 0px 10px;
 		    display: flex;
 		    text-align: center;
     		background-color: #eee;
@@ -20,18 +20,20 @@
 		nav a {
 			flex: auto;
 			text-decoration: none;
+			padding: 20px;
 		}
 		#comic {
 			width: calc(100% - 16px);
     		overflow-x: scroll;
     		margin: 8px;
-    		max-height: calc(100vh - 130px);
+    		height: calc(100vh - 130px);
     		text-align: center;
 		}
 	</style>
 </head>
 <body>
 	<div id="comic"></div>
+	<nav></nav>
 	
 	<script type="text/javascript">
 		getUrlVars = () => {
@@ -66,20 +68,49 @@
 			imgName = imgName.substring(1, imgName.length - 1);
 			showImage(imgName);
 
-			let prevBtn = rawResponse.match(regex3)[0];
+			const nav = document.getElementsByTagName('NAV')[0];
+			let prevBtn = null;
+			let nextBtn = null;
+			
+			if (rawResponse.match(regex3)) {
+				prevBtn = rawResponse.match(regex3)[0];
+			}
 			if (prevBtn) {
 				prevBtn = prevBtn.substring(9, prevBtn.length - 30);
-				document.getElementById('prev').setAttribute('href', '?page=' + prevBtn);
+				const prev = document.createElement('a');
+				const prevText = document.createTextNode('Prev');
+				prev.appendChild(prevText);
+				prev.setAttribute('href', '?page=' + prevBtn);
+				nav.appendChild(prev);
 			}
 
-			let nextBtn = rawResponse.match(regex4)[0];
+			const first = document.createElement('a');
+			const firstText = document.createTextNode('First');
+			first.appendChild(firstText);
+			first.setAttribute('href', '?page=autowb001.html');
+			nav.appendChild(first);
+
+			const todays = document.createElement('a');
+			const todaysText = document.createTextNode('Todays');
+			todays.appendChild(todaysText);
+			todays.setAttribute('href', 'index.html');
+			nav.appendChild(todays);
+
+			if (rawResponse.match(regex4)) {
+				nextBtn = rawResponse.match(regex4)[0]
+			}
 			if (nextBtn) {
 				nextBtn = nextBtn.substring(9, nextBtn.length - 26);
-				document.getElementById('next').setAttribute('href', '?page=' + nextBtn);
+				const next = document.createElement('a');
+				const nextText = document.createTextNode('Next');
+				next.appendChild(nextText);
+				next.setAttribute('href', '?page=' + nextBtn);
+				nav.appendChild(next);
 			}
+		
 
 		}).catch( error => {
-		  console.log('There has been a problem with your fetch operation: ', error.message);
+		  console.log(error);
 		});
 
 		const loadImage = url => {
@@ -107,11 +138,5 @@
 			loadImage(path).then(handleSuccess, handleFailure);
 		}
 	</script>
-	<nav>
-		<a href="?page=autowb001.html">First</a>
-		<a href="#" id="prev">Previous</a>
-		<a href="#" id="next">Next</a>
-		<a href="index.html">Todays</a>
-	</nav>
 </body>
 </html>
