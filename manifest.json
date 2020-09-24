@@ -1,0 +1,15 @@
+{
+  "name": "The Whiteboard",
+  "short_name": "TWB",
+  "start_url": "/",
+  "display": "minimal",
+  "background_color": "#fff",
+  "description": "Alaska's coolest web comic.",
+  "icons": [
+    {
+      "src": "icon.jpg",
+      "sizes": "80x80",
+      "type": "image/jpg"
+    }
+  ]
+}

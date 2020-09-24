@@ -1,13 +1,51 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <title>The Whiteboard Mobile</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <style>body{margin:0;font-family:sans-serif}nav{position:fixed;bottom:0;right:0;left:0;padding:0 10px;display:flex;text-align:center;background-color:#eee}nav a{flex:auto;text-decoration:none;padding:20px}#comic{position:absolute;top:0;right:0;left:0;bottom:58px;overflow-x:scroll;margin:8px;text-align:center}</style>
-   </head>
-   <body>
-      <div id="comic"></div>
-      <nav></nav>
-      <script type="text/javascript">getUrlVars=(()=>{const e={};window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,(t,r,n)=>{e[r]=n});return e});const proxyUrl="https://boring-montalcini-afe43b.netlify.app/.netlify/functions/proxy?url=";let twbUrl="http://the-whiteboard.com";getUrlVars().page&&(twbUrl="http://the-whiteboard.com/"+getUrlVars().page);const url=proxyUrl+twbUrl,regex=/<br><img SRC=".*"><br>/gim,regex2=/".*"/gim,regex3=/<a href=".{4,15}\.html"><img src="previous\.png"><\/a>/gim,regex4=/<a href=".{4,15}\.html"><img src="next\.png"><\/a>/gim;fetch(url).then(e=>{if(e.ok)return e.text();throw new Error("Network response was not ok.")}).then(e=>{let t=e.match(regex)[0].match(regex2)[0];t=t.substring(1,t.length-1),showImage(t);const r=document.getElementsByTagName("NAV")[0];let n=null,a=null;if(e.match(regex3)&&(n=e.match(regex3)[0]),n){n=n.substring(9,n.length-30);const e=document.createElement("a"),t=document.createTextNode("Prev");e.appendChild(t),e.setAttribute("href","?page="+n),r.appendChild(e)}const o=document.createElement("a"),c=document.createTextNode("First");o.appendChild(c),o.setAttribute("href","?page=autowb001.html"),r.appendChild(o);const l=document.createElement("a"),h=document.createTextNode("Todays");if(l.appendChild(h),l.setAttribute("href","index.html"),r.appendChild(l),e.match(regex4)&&(a=e.match(regex4)[0]),a){a=a.substring(9,a.length-26);const e=document.createElement("a"),t=document.createTextNode("Next");e.appendChild(t),e.setAttribute("href","?page="+a),r.appendChild(e)}}).catch(e=>{console.log(e)});const loadImage=e=>new Promise((t,r)=>{const n=new Image;n.src=e,n.onload=(()=>{t(n.src)}),n.onerror=(()=>{r(new Error("Could not load image at "+e))})}),handleSuccess=e=>{const t=new Image;t.src=e,document.getElementById("comic").appendChild(t)},handleFailure=e=>{console.log(e)},showImage=e=>{loadImage("http://the-whiteboard.com/"+e).then(handleSuccess,handleFailure)};</script>
-   </body>
+
+<head>
+   <title>The Whiteboard Mobile</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="manifest" href="/manifest.json">
+   <style>
+      body {
+         margin: 0;
+         font-family: sans-serif
+      }
+
+      nav {
+         position: fixed;
+         bottom: 0;
+         right: 0;
+         left: 0;
+         padding: 0 10px;
+         display: flex;
+         text-align: center;
+         background-color: #eee
+      }
+
+      nav a {
+         flex: auto;
+         text-decoration: none;
+         padding: 20px
+      }
+
+      #comic {
+         position: absolute;
+         top: 0;
+         right: 0;
+         left: 0;
+         bottom: 58px;
+         overflow-x: scroll;
+         margin: 8px;
+         text-align: center
+      }
+   </style>
+</head>
+
+<body>
+   <div id="comic"></div>
+   <nav></nav>
+   <script
+      type="text/javascript">getUrlVars = (() => { const e = {}; window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (t, r, n) => { e[r] = n }); return e }); const proxyUrl = "https://boring-montalcini-afe43b.netlify.app/.netlify/functions/proxy?url="; let twbUrl = "http://the-whiteboard.com"; getUrlVars().page && (twbUrl = "http://the-whiteboard.com/" + getUrlVars().page); const url = proxyUrl + twbUrl, regex = /<br><img SRC=".*"><br>/gim, regex2 = /".*"/gim, regex3 = /<a href=".{4,15}\.html"><img src="previous\.png"><\/a>/gim, regex4 = /<a href=".{4,15}\.html"><img src="next\.png"><\/a>/gim; fetch(url).then(e => { if (e.ok) return e.text(); throw new Error("Network response was not ok.") }).then(e => { let t = e.match(regex)[0].match(regex2)[0]; t = t.substring(1, t.length - 1), showImage(t); const r = document.getElementsByTagName("NAV")[0]; let n = null, a = null; if (e.match(regex3) && (n = e.match(regex3)[0]), n) { n = n.substring(9, n.length - 30); const e = document.createElement("a"), t = document.createTextNode("Prev"); e.appendChild(t), e.setAttribute("href", "?page=" + n), r.appendChild(e) } const o = document.createElement("a"), c = document.createTextNode("First"); o.appendChild(c), o.setAttribute("href", "?page=autowb001.html"), r.appendChild(o); const l = document.createElement("a"), h = document.createTextNode("Todays"); if (l.appendChild(h), l.setAttribute("href", "index.html"), r.appendChild(l), e.match(regex4) && (a = e.match(regex4)[0]), a) { a = a.substring(9, a.length - 26); const e = document.createElement("a"), t = document.createTextNode("Next"); e.appendChild(t), e.setAttribute("href", "?page=" + a), r.appendChild(e) } }).catch(e => { console.log(e) }); const loadImage = e => new Promise((t, r) => { const n = new Image; n.src = e, n.onload = (() => { t(n.src) }), n.onerror = (() => { r(new Error("Could not load image at " + e)) }) }), handleSuccess = e => { const t = new Image; t.src = e, document.getElementById("comic").appendChild(t) }, handleFailure = e => { console.log(e) }, showImage = e => { loadImage("http://the-whiteboard.com/" + e).then(handleSuccess, handleFailure) };</script>
+</body>
+
 </html>
