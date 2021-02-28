@@ -1,28 +1,19 @@
 {
-  "name": "twb-mobile",
-  "version": "0.0.1",
-  "description": "The Whiteboard",
-  "main": "index.html",
+  "name": "zlota-baba",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint **/*.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nova93/twb-mobile.git"
+  "dependencies": {
+    "next": "10.0.5",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "styled-components": "^5.2.1"
   },
-  "author": "Robert Moritz",
-  "bugs": {
-    "url": "https://github.com/nova93/twb-mobile/issues"
-  },
-  "homepage": "https://github.com/nova93/twb-mobile#readme",
   "devDependencies": {
-    "eslint": "^7.9.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.21.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "babel-plugin-styled-components": "^1.12.0"
   }
 }
