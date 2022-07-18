@@ -11,7 +11,6 @@ import scraper from "../lib/scraper";
 import { COMIC_URL } from "../config/names";
 import { HomeProps } from "../types/nav";
 import { useRouter } from "next/router";
-import Image from "next/image";
 
 export default function Home({ prev, next, image }: HomeProps) {
   const router = useRouter();
@@ -38,7 +37,13 @@ export default function Home({ prev, next, image }: HomeProps) {
             </Text>
 
             {image && (
-              <div style={{ overflow: "auto" }} ref={componentRef}>
+              <div
+                style={{
+                  overflow: "auto",
+                  height: "calc(100vh - 7.5rem - 40px);",
+                }}
+                ref={componentRef}
+              >
                 <img
                   style={{ maxWidth: "unset" }}
                   src={`${COMIC_URL}${image}`}
