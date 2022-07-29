@@ -11,6 +11,7 @@ import scraper from "../lib/scraper";
 import { COMIC_URL } from "../config/names";
 import { HomeProps } from "../types/nav";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Home({ prev, next, image }: HomeProps) {
   const router = useRouter();
@@ -36,11 +37,28 @@ export default function Home({ prev, next, image }: HomeProps) {
               mobile-friendly (ish)
             </Text>
 
-            {image && (
+            {image && next && (
+              <Link href={next}>
+                <div
+                  style={{
+                    overflow: "auto",
+                    height: "calc(100vh - 7.5rem - 40px)",
+                  }}
+                  ref={componentRef}
+                >
+                  <img
+                    style={{ maxWidth: "unset" }}
+                    src={`${COMIC_URL}${image}`}
+                    alt={`${COMIC_URL}${image}`}
+                  />
+                </div>
+              </Link>
+            )}
+            {image && !next && (
               <div
                 style={{
                   overflow: "auto",
-                  height: "calc(100vh - 7.5rem - 40px);",
+                  height: "calc(100vh - 7.5rem - 40px)",
                 }}
                 ref={componentRef}
               >
@@ -74,15 +92,24 @@ export default function Home({ prev, next, image }: HomeProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const slug = context.params?.slug;
+  const lastPage = "index.html";
 
   let url = COMIC_URL;
   if (slug) {
     url += slug;
+  } else {
+    url += lastPage;
   }
 
   const res = await fetch(url);
   const data = await res.text();
   const { prev, next, image } = scraper(data);
 
-  return { props: { prev, next, image } };
+  let alternativeNext: string | null = null;
+
+  if (!next && !url.endsWith(lastPage) && slug) {
+    alternativeNext = lastPage;
+  }
+
+  return { props: { prev, next: alternativeNext ?? next, image } };
 };
