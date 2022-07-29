@@ -94,6 +94,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const slug = context.params?.slug;
   const lastPage = "index.html";
 
+  console.log("context", context);
+
   let url = COMIC_URL;
   if (slug) {
     url += slug;
