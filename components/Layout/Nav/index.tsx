@@ -77,6 +77,15 @@ export default function Nav({ prev, next }: NavProps) {
         </Modal.Header>
         <Modal.Body>
           <Button
+            color="success"
+            rounded
+            onPress={() =>
+              (window.location.href = "https://www.patreon.com/docsmachine")
+            }
+          >
+            Support the creator!
+          </Button>
+          <Button
             color="secondary"
             rounded
             onPress={() => menuLinksHandler("/")}
@@ -92,7 +101,7 @@ export default function Nav({ prev, next }: NavProps) {
           </Button>
         </Modal.Body>
         <Modal.Footer>
-          Made by <a href="https://github.com/nova93">@nova93</a>
+          Website by <a href="https://github.com/nova93">@nova93</a>
         </Modal.Footer>
       </Modal>
     </nav>
