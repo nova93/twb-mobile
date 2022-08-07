@@ -1,4 +1,4 @@
-import { Button, Text } from "@nextui-org/react";
+import { Button, Text, theme } from "@nextui-org/react";
 import { Modal } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -37,11 +37,12 @@ export default function Nav({ prev, next }: NavProps) {
       style={{
         display: "flex",
         justifyContent: "space-between",
-        margin: "1rem",
+        padding: "1rem",
         position: "absolute",
         left: 0,
         bottom: 0,
         right: 0,
+        backgroundColor: theme?.colors.background.value,
       }}
     >
       <Button
@@ -80,7 +81,7 @@ export default function Nav({ prev, next }: NavProps) {
           <Button
             color="secondary"
             rounded
-            onPressStart={() => menuLinksHandler("/")}
+            onPressStart={() => menuLinksHandler("/index.html")}
           >
             Todays comic
           </Button>

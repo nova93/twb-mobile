@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import { Card, Text } from "@nextui-org/react";
+import { Card, Grid, Text } from "@nextui-org/react";
 import { useEffect, useRef } from "react";
 
 import Container from "../components/Layout/Container";
@@ -12,9 +12,11 @@ import { COMIC_URL } from "../config/names";
 import { HomeProps } from "../types/nav";
 import { useRouter } from "next/router";
 
-export default function Home({ prev, next, image }: HomeProps) {
+export default function Home({ prev, next, image, date }: HomeProps) {
   const router = useRouter();
   const componentRef = useRef<any>();
+
+  console.log({ prev, next, image });
 
   useEffect(() => {
     componentRef.current?.scrollTo(0, 0);
@@ -29,18 +31,13 @@ export default function Home({ prev, next, image }: HomeProps) {
         </Head>
         <Main>
           <>
-            <Text h1 size="2rem">
-              The Whiteboard
-            </Text>
-            <Text h2 size="1rem">
-              mobile-friendly (ish)
-            </Text>
+            {date && <Text css={{ textAlign: "center" }}>{date}</Text>}
 
             {image && (
               <div
                 style={{
                   overflow: "auto",
-                  height: "calc(100vh - 7.5rem - 40px);",
+                  height: "fit-content",
                 }}
                 ref={componentRef}
               >
@@ -66,7 +63,7 @@ export default function Home({ prev, next, image }: HomeProps) {
             )}
           </>
         </Main>
-        <Nav prev={prev} next={next} />
+        <Nav prev={prev} next={next} date={date} />
       </>
     </Container>
   );
@@ -82,7 +79,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const res = await fetch(url);
   const data = await res.text();
-  const { prev, next, image } = scraper(data);
+  const { prev, next, image, date } = scraper(data);
 
-  return { props: { prev, next, image } };
+  return { props: { prev, next, image, date } };
 };
