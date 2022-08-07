@@ -15,7 +15,7 @@ import Link from "next/link";
 
 const imageWrapperStyling: CSSProperties = {
   overflow: "auto",
-  height: "calc(100vh - 4.5rem - 40px)",
+  height: "calc(100vh - 4.5rem - 44px)",
   textAlign: "center",
 };
 
