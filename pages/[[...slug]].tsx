@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import { Card, Text } from "@nextui-org/react";
-import { useEffect, useRef } from "react";
+import { Card, Grid, Loading, Text, useSSR } from "@nextui-org/react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 
 import Container from "../components/Layout/Container";
 import Main from "../components/Layout/Main";
@@ -13,13 +13,25 @@ import { HomeProps } from "../types/nav";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-export default function Home({ prev, next, image }: HomeProps) {
+const imageWrapperStyling: CSSProperties = {
+  overflow: "auto",
+  height: "calc(100vh - 4.5rem - 44px)",
+  textAlign: "center",
+};
+
+export default function Home({ prev, next, image, date }: HomeProps) {
   const router = useRouter();
   const componentRef = useRef<any>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     componentRef.current?.scrollTo(0, 0);
   }, [router.asPath]);
+
+  useEffect(() => {
+    router.events.on("routeChangeStart", () => setLoading(true));
+    router.events.on("routeChangeComplete", () => setLoading(false));
+  });
 
   return (
     <Container>
@@ -30,22 +42,19 @@ export default function Home({ prev, next, image }: HomeProps) {
         </Head>
         <Main>
           <>
-            <Text h1 size="2rem">
-              The Whiteboard
-            </Text>
-            <Text h2 size="1rem">
-              mobile-friendly (ish)
-            </Text>
+            {loading && (
+              <Loading
+                css={{ display: "flex", textAlign: "center", margin: "1rem" }}
+              />
+            )}
 
-            {image && next && (
+            {!loading && date && (
+              <Text css={{ textAlign: "center" }}>{date}</Text>
+            )}
+
+            {!loading && image && next && (
               <Link href={next}>
-                <div
-                  style={{
-                    overflow: "auto",
-                    height: "calc(100vh - 7.5rem - 40px)",
-                  }}
-                  ref={componentRef}
-                >
+                <div style={imageWrapperStyling} ref={componentRef}>
                   <img
                     style={{ maxWidth: "unset" }}
                     src={`${COMIC_URL}${image}`}
@@ -54,14 +63,8 @@ export default function Home({ prev, next, image }: HomeProps) {
                 </div>
               </Link>
             )}
-            {image && !next && (
-              <div
-                style={{
-                  overflow: "auto",
-                  height: "calc(100vh - 7.5rem - 40px)",
-                }}
-                ref={componentRef}
-              >
+            {!loading && image && !next && (
+              <div style={imageWrapperStyling} ref={componentRef}>
                 <img
                   style={{ maxWidth: "unset" }}
                   src={`${COMIC_URL}${image}`}
@@ -70,7 +73,7 @@ export default function Home({ prev, next, image }: HomeProps) {
               </div>
             )}
 
-            {!image && (
+            {!loading && !image && (
               <div>
                 <Card
                   variant="bordered"
@@ -84,7 +87,7 @@ export default function Home({ prev, next, image }: HomeProps) {
             )}
           </>
         </Main>
-        <Nav prev={prev} next={next} />
+        <Nav prev={prev} next={next} date={date} />
       </>
     </Container>
   );
@@ -103,7 +106,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const res = await fetch(url);
   const data = await res.text();
-  const { prev, next, image } = scraper(data);
+  const { prev, next, image, date } = scraper(data);
 
   let alternativeNext: string | null = null;
 
@@ -111,5 +114,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     alternativeNext = lastPage;
   }
 
-  return { props: { prev, next: alternativeNext ?? next, image } };
+  return { props: { prev, next: alternativeNext ?? next, image, date } };
 };

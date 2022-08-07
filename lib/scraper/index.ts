@@ -1,11 +1,12 @@
 import { HomeProps } from "../../types/nav";
 
 export default function scraper(data: string): HomeProps {
-  const imageRegex = /<br><img src=".{4,25}"><br>/gim;
+  const imageRegex = /<br><img src=".{4,35}"><br>/gim;
   const justImageRegex = /".*"/;
   const justHTMLRegex = /".*.html/;
-  const prevRegex = /<a href=".{4,25}\.html"><img src="previous\.png"><\/a>/gim;
-  const nextRegex = /<a href=".{4,25}\.html"><img src="next\.png"><\/a>/gim;
+  const prevRegex = /<a href=".{4,30}\.html"><img src="previous\.png"><\/a>/gim;
+  const nextRegex = /<a href=".{4,30}\.html"><img src="next\.png"><\/a>/gim;
+  const dateRegex = /\d{4}-\d{2}-\d{2}/;
 
   const image =
     data.match(imageRegex)?.[0].match(justImageRegex)?.[0].slice(1, -1) ?? null;
@@ -16,5 +17,7 @@ export default function scraper(data: string): HomeProps {
   const next =
     data.match(nextRegex)?.[0].match(justHTMLRegex)?.[0].slice(1) ?? null;
 
-  return { prev, next, image };
+  const date = data.match(dateRegex)?.[0] ?? null;
+
+  return { prev, next, image, date };
 }
