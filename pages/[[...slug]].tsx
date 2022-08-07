@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import { Card, Grid, Text } from "@nextui-org/react";
-import { CSSProperties, useEffect, useRef } from "react";
+import { Card, Grid, Loading, Text, useSSR } from "@nextui-org/react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 
 import Container from "../components/Layout/Container";
 import Main from "../components/Layout/Main";
@@ -22,10 +22,16 @@ const imageWrapperStyling: CSSProperties = {
 export default function Home({ prev, next, image, date }: HomeProps) {
   const router = useRouter();
   const componentRef = useRef<any>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     componentRef.current?.scrollTo(0, 0);
   }, [router.asPath]);
+
+  useEffect(() => {
+    router.events.on("routeChangeStart", () => setLoading(true));
+    router.events.on("routeChangeComplete", () => setLoading(false));
+  });
 
   return (
     <Container>
@@ -36,9 +42,17 @@ export default function Home({ prev, next, image, date }: HomeProps) {
         </Head>
         <Main>
           <>
-            {date && <Text css={{ textAlign: "center" }}>{date}</Text>}
+            {loading && (
+              <Loading
+                css={{ display: "flex", textAlign: "center", margin: "1rem" }}
+              />
+            )}
 
-            {image && next && (
+            {!loading && date && (
+              <Text css={{ textAlign: "center" }}>{date}</Text>
+            )}
+
+            {!loading && image && next && (
               <Link href={next}>
                 <div style={imageWrapperStyling} ref={componentRef}>
                   <img
@@ -49,7 +63,7 @@ export default function Home({ prev, next, image, date }: HomeProps) {
                 </div>
               </Link>
             )}
-            {image && !next && (
+            {!loading && image && !next && (
               <div style={imageWrapperStyling} ref={componentRef}>
                 <img
                   style={{ maxWidth: "unset" }}
@@ -59,7 +73,7 @@ export default function Home({ prev, next, image, date }: HomeProps) {
               </div>
             )}
 
-            {!image && (
+            {!loading && !image && (
               <div>
                 <Card
                   variant="bordered"
