@@ -11,12 +11,6 @@ import { NavProps } from "../../../types/nav";
 export default function Nav({ prev, next }: NavProps) {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
-  const modalHandler = () => {
-    console.log("triggered!");
-    console.log("old", visible);
-    console.log("new", !visible);
-    setVisible(!visible);
-  };
 
   const prevHandler = () => {
     router.push(`/${prev}`);
@@ -27,8 +21,7 @@ export default function Nav({ prev, next }: NavProps) {
   };
 
   const menuLinksHandler = (path: string) => {
-    console.log("clicked on the handler");
-    modalHandler();
+    setVisible(!visible);
     router.push(path);
   };
 
@@ -37,8 +30,8 @@ export default function Nav({ prev, next }: NavProps) {
       style={{
         display: "flex",
         justifyContent: "space-between",
-        padding: "1rem",
-        position: "absolute",
+        margin: "1rem",
+        position: "fixed",
         left: 0,
         bottom: 0,
         right: 0,
@@ -53,7 +46,12 @@ export default function Nav({ prev, next }: NavProps) {
         onPress={prevHandler}
         icon={<Left />}
       />
-      <Button color="gradient" auto icon={<Menu />} onClick={modalHandler} />
+      <Button
+        color="gradient"
+        auto
+        icon={<Menu />}
+        onPressStart={() => setVisible(true)}
+      />
       <Button
         color="secondary"
         auto
@@ -66,7 +64,7 @@ export default function Nav({ prev, next }: NavProps) {
         closeButton
         aria-labelledby="modal-title"
         open={visible}
-        onClose={modalHandler}
+        onClose={() => setVisible(false)}
       >
         <Modal.Header>
           <Text size={16}>
@@ -81,7 +79,7 @@ export default function Nav({ prev, next }: NavProps) {
           <Button
             color="secondary"
             rounded
-            onPressStart={() => menuLinksHandler("/index.html")}
+            onPress={() => menuLinksHandler("/")}
           >
             Todays comic
           </Button>

@@ -11,6 +11,7 @@ import scraper from "../lib/scraper";
 import { COMIC_URL } from "../config/names";
 import { HomeProps } from "../types/nav";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Home({ prev, next, image, date }: HomeProps) {
   const router = useRouter();
@@ -33,7 +34,25 @@ export default function Home({ prev, next, image, date }: HomeProps) {
           <>
             {date && <Text css={{ textAlign: "center" }}>{date}</Text>}
 
-            {image && (
+            {image && next && (
+              <Link href={next}>
+                <div
+                  style={{
+                    overflow: "auto",
+                    height: "calc(100vh - 4.5rem - 40px)",
+                    textAlign: "center",
+                  }}
+                  ref={componentRef}
+                >
+                  <img
+                    style={{ maxWidth: "unset" }}
+                    src={`${COMIC_URL}${image}`}
+                    alt={`${COMIC_URL}${image}`}
+                  />
+                </div>
+              </Link>
+            )}
+            {image && !next && (
               <div
                 style={{
                   overflow: "auto",
@@ -71,15 +90,24 @@ export default function Home({ prev, next, image, date }: HomeProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const slug = context.params?.slug;
+  const lastPage = "index.html";
 
   let url = COMIC_URL;
   if (slug) {
-    url += slug;
+    url += slug[0] === "index" ? lastPage : slug[0];
+  } else {
+    url += lastPage;
   }
 
   const res = await fetch(url);
   const data = await res.text();
   const { prev, next, image, date } = scraper(data);
 
-  return { props: { prev, next, image, date } };
+  let alternativeNext: string | null = null;
+
+  if (!next && !url.endsWith(lastPage) && slug) {
+    alternativeNext = lastPage;
+  }
+
+  return { props: { prev, next: alternativeNext ?? next, image, date } };
 };

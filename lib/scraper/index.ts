@@ -1,7 +1,7 @@
 import { HomeProps } from "../../types/nav";
 
 export default function scraper(data: string): HomeProps {
-  const imageRegex = /<br><img SRC=".*"><br>/gim;
+  const imageRegex = /<br><img src=".{4,35}"><br>/gim;
   const justImageRegex = /".*"/;
   const justHTMLRegex = /".*.html/;
   const prevRegex = /<a href=".{4,30}\.html"><img src="previous\.png"><\/a>/gim;
