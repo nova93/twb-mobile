@@ -8,7 +8,7 @@ import Container from "../components/Layout/Container";
 import Main from "../components/Layout/Main";
 import Nav from "../components/Layout/Nav";
 import scraper from "../lib/scraper";
-import { COMIC_URL } from "../config/names";
+import { COMIC_URL, COMIC_PAGE } from "../config/names";
 import { HomeProps } from "../types/nav";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -97,12 +97,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const slug = context.params?.slug;
   const lastPage = "index.html";
 
-  let url = COMIC_URL;
-  if (slug) {
-    url += slug[0] === "index" ? lastPage : slug[0];
-  } else {
-    url += lastPage;
+  // slug is attacker-controlled and is concatenated into a server-side fetch.
+  // Only allow the flat "<name>.html" form the upstream site actually uses so
+  // the request cannot be steered onto an arbitrary upstream path.
+  let page = lastPage;
+  if (slug && slug[0] !== "index") {
+    if (!COMIC_PAGE.test(slug[0])) {
+      return { notFound: true };
+    }
+    page = slug[0];
   }
+
+  const url = COMIC_URL + page;
 
   const res = await fetch(url);
   const data = await res.text();
@@ -110,7 +116,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   let alternativeNext: string | null = null;
 
-  if (!next && !url.endsWith(lastPage) && slug) {
+  if (!next && page !== lastPage && slug) {
     alternativeNext = lastPage;
   }
 
