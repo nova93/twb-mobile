@@ -23,7 +23,7 @@
   },
   "overrides": {
     "postcss": "^8.5.26",
-    "sharp": "^0.35.3",
+    "sharp": "^0.35.4",
     "@babel/runtime": "^7.26.10",
     "@babel/runtime-corejs3": "^7.26.10"
   }
